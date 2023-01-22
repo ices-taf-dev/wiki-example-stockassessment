@@ -4,12 +4,18 @@
 ## After:
 
 library(icesTAF)
+library(stockassessment)
 
 mkdir("model")
 
-(load(taf.data.path("sam_fit/fit.RData")))
+load("data/data.RData", verbose = TRUE)
 
-retro_fit <- stockassessment::retro(fit, year = 2017:2021)
+conf <- loadConf(dat, taf.data.path("sam_config", "model.cfg"), patch = TRUE)
+par <- defpar(dat, conf)
+
+fit <- sam.fit(dat, conf, par)
+
+retro_fit <- retro(fit, year = 5)
 
 save(fit, file = "model/fit.RData")
 save(retro_fit, file = "model/retro_fit.RData")
