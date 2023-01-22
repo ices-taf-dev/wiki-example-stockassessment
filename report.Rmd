@@ -74,7 +74,7 @@ pander(style_table1(catch_table), missing = "-")
 mohns <- read.taf("output/mohns_rho.csv")
 ```
 
-The mohns rho value for F is `r round(mohns[1,"Fbar(3-5)"], 3)`.  The
+The mohns rho value for F is `r round(mohns[1,"Fbar(3-7)"], 3)`.  The
 plot of the retrospective is plotted in `r figure_nums("retro_plot", display = "cite")`
 
 ```{r retro_plot, fig.cap = cap_in}

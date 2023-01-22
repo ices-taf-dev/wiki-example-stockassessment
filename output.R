@@ -1,15 +1,6 @@
 ## Extract results of interest, write TAF output tables
 
 ## Before:
-## After:
-
-library(icesTAF)
-
-mkdir("output")
-
-## Extract results of interest, write TAF output tables
-
-## Before:
 ## After: csv tables of assessment output
 
 library(icesTAF)
@@ -18,7 +9,7 @@ library(stockassessment)
 mkdir("output")
 
 # load fit
-(load("model/fit.rData"))
+load("model/fit.rData", verbose = TRUE)
 
 # Model Parameters
 partab <- partable(fit)
@@ -41,7 +32,7 @@ colnames(tsb) <- c("TSB", "Low", "High")
 
 # Summary Table
 tab.summary <- cbind(as.data.frame(summary(fit)), tsb)
-tab.summary <- cbind(tab.summary, rbind(catab, NA))
+tab.summary <- cbind(tab.summary, catab)
 # should probably make Low and High column names unique R_Low etc.
 
 mohns_rho <- mohn(retro_fit)
