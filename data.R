@@ -3,46 +3,80 @@
 ## Before:
 ## After:
 
+## load libraries
 library(icesTAF)
 library(stockassessment)
 
+# ensure directory
 mkdir("data")
 
-## 1 Read underlying data from bootstrap/data
+#  Read underlying data from bootstrap/data
 
-catage <- read.ices(taf.data.path("sam_data/cn.dat"))
+# quick utility function
+read.ices.taf <- function(...) {
+  read.ices(taf.data.path("sam_data", ...))
+}
+
+#  ## Catch-numbers-at-age ##
+catage <- read.ices.taf("cn.dat")
 
 #  ## Catch-weight-at-age ##
-wcatch <- read.ices(taf.data.path("sam_data/cw.dat"))
-wdiscards <- read.ices(taf.data.path("sam_data/dw.dat"))
-wlandings <- read.ices(taf.data.path("sam_data/lw.dat"))
+wcatch <- read.ices.taf("cw.dat")
+wdiscards <- read.ices.taf("dw.dat")
+wlandings <- read.ices.taf("lw.dat")
 
 #  ## Natural-mortality ##
-natmort <- read.ices(taf.data.path("sam_data/nm.dat"))
+natmort <- read.ices.taf("nm.dat")
+
+# maturity
+maturity <- read.ices.taf("mo.dat")
 
 #  ## Proportion of F before spawning ##
-propf <- read.ices(taf.data.path("sam_data/pf.dat"))
+propf <- read.ices.taf("pf.dat")
 
 #  ## Proportion of M before spawning ##
-propm <- read.ices(taf.data.path("sam_data/pm.dat"))
+propm <- read.ices.taf("pm.dat")
 
 #  ## Stock-weight-at-age ##
-wstock <- read.ices(taf.data.path("sam_data/sw.dat"))
+wstock <- read.ices.taf("sw.dat")
 
 # Landing fraction in catch at age
-landfrac <- read.ices(taf.data.path("sam_data/lf.dat"))
+landfrac <- read.ices.taf("lf.dat")
 
-# landings
-latage <- catage * landfrac[,-1]
-datage <- catage * (1 - landfrac[, -1])
+# survey data
+surveys <- read.ices.taf("survey.dat")
 
 ## 2 Preprocess data
+
+# landings
+latage <- catage * landfrac
+datage <- catage * (1 - landfrac)
 
 ## 3 Write TAF tables to data directory
 write.taf(
   c(
     "catage", "latage", "datage", "wstock", "wcatch",
-    "wdiscards", "wlandings", "natmort", "propf", "propm",
-    "landfrac"),
+    "wdiscards", "wlandings", "natmort", "maturity", "propf", "propm",
+    "landfrac"
+  ),
   dir = "data"
 )
+
+
+## write model files
+
+dat <- setup.sam.data(
+  surveys = surveys,
+  residual.fleet = catage,
+  prop.mature = maturity,
+  stock.mean.weight = wstock,
+  catch.mean.weight = wcatch,
+  dis.mean.weight = wdiscards,
+  land.mean.weight = wlandings,
+  prop.f = propf,
+  prop.m = propm,
+  natural.mortality = natmort,
+  land.frac = landfrac
+)
+
+save(dat, file = "data/data.RData")
