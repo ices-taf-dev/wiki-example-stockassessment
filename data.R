@@ -12,9 +12,10 @@ mkdir("data")
 
 #  Read underlying data from bootstrap/data
 
-# quick utility function
-read.ices.taf <- function(...) {
-  read.ices(taf.data.path("sam_data", ...))
+read.ices.taf <- function(file) {
+  read.ices(
+    taf.data.path("sam_data", file)
+  )
 }
 
 #  ## Catch-numbers-at-age ##
@@ -28,14 +29,14 @@ wlandings <- read.ices.taf("lw.dat")
 #  ## Natural-mortality ##
 natmort <- read.ices.taf("nm.dat")
 
-# maturity
-maturity <- read.ices.taf("mo.dat")
-
 #  ## Proportion of F before spawning ##
 propf <- read.ices.taf("pf.dat")
 
 #  ## Proportion of M before spawning ##
 propm <- read.ices.taf("pm.dat")
+
+# maturity ogive
+maturity <- read.ices.taf("mo.dat")
 
 #  ## Stock-weight-at-age ##
 wstock <- read.ices.taf("sw.dat")
@@ -52,16 +53,19 @@ surveys <- read.ices.taf("survey.dat")
 latage <- catage * landfrac
 datage <- catage * (1 - landfrac)
 
+# put surveys in seperate matrices (for writing out)
+survey_summer <- surveys[[1]]
+survey_spring <- surveys[[2]]
+
 ## 3 Write TAF tables to data directory
 write.taf(
   c(
     "catage", "latage", "datage", "wstock", "wcatch",
-    "wdiscards", "wlandings", "natmort", "maturity", "propf", "propm",
-    "landfrac"
+    "wdiscards", "wlandings", "natmort", "propf", "propm",
+    "landfrac", "survey_summer", "survey_spring"
   ),
   dir = "data"
 )
-
 
 ## write model files
 
