@@ -5,6 +5,7 @@
 
 library(icesTAF)
 library(stockassessment)
+library(FLfse)
 
 mkdir("output")
 
@@ -43,3 +44,6 @@ write.taf(
   c("partab", "tab.summary", "natage", "fatage", "mohns_rho"),
   dir = "output"
 )
+
+stock <- FLfse::SAM2FLStock(fit)
+save(stock, file = "output/FLStock.Rdata")
