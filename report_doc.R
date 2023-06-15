@@ -7,9 +7,6 @@ mkdir("report")
 # combine into a word and html document
 render("report.Rmd",
   output_format = c("word_document", "html_document"),
-  encoding = "UTF-8"
+  encoding = "UTF-8",
+  output_dir = "report"
 )
-
-# move to report folder
-cp("report.html", "report", move = TRUE)
-cp("report.docx", "report", move = TRUE)
