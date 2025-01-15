@@ -1,4 +1,6 @@
 library(stockassessment)
+library(icesTAF)
+
 source("utilities.R")
 
 mkdir("report")
@@ -123,41 +125,41 @@ plots <- function() {
   }
 
 
-  if (exists("LO")) {
-    ssbplot(LO)
+  if (exists("leaveout_fits")) {
+    ssbplot(leaveout_fits)
     stampit()
 
-    fbarplot(LO)
+    fbarplot(leaveout_fits)
     stampit()
 
-    recplot(LO)
+    recplot(leaveout_fits)
     stampit()
 
-    catchplot(LO)
+    catchplot(leaveout_fits)
     stampit()
   }
 
-  if (exists("retro")) {
-    rho <- mohn(retro)
-    rho2 <- mohn(retro, lag = 1)
-    ssbplot(retro, las = 0, drop = 0)
+  if (exists("retro_fit")) {
+    rho <- mohn(retro_fit)
+    rho2 <- mohn(retro_fit, lag = 1)
+    ssbplot(retro_fit, las = 0, drop = 0)
     legend("topright", legend = paste0("Rho ", round(rho[2] * 100), "%"))
     stampit()
 
-    fbarplot(retro, las = 0, drop = 0)
+    fbarplot(retro_fit, las = 0, drop = 0)
     legend("topright", legend = paste0("Rho ", round(rho[3] * 100), "%"))
     stampit()
 
-    recplot(retro, las = 0, drop = 0)
+    recplot(retro_fit, las = 0, drop = 0)
     legend("topright", legend = paste0("Rho ", round(rho[1] * 100), "%"))
     stampit()
 
-    recplot(retro, las = 0, drop = 1)
+    recplot(retro_fit, las = 0, drop = 1)
     legend("topright", legend = paste0("Rho-lag-1: ", round(rho2[1] * 100), "%"))
     stampit()
 
 
-    catchplot(retro)
+    catchplot(retro_fit)
     stampit()
   }
   if (exists("forecast")) {

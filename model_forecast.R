@@ -2,14 +2,13 @@
 library(stockassessment)
 load("model/fit.RData")
 
-forecast <- list()
-Ry <- 2012:2022
-
 # scenarios:
 
 ###################
 ## USER edits here
 ###################
+
+Ry <- 2012:2022
 
 Fpa <- 0.69
 Flim <- 1.47
@@ -19,6 +18,8 @@ Fmsyadvice <- Fmsy * 15519 / 24739
 #######################
 ## USER edits end here
 #######################
+
+forecast <- list()
 
 # run forecast scenarios
 set.seed(12345)

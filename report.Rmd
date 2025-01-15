@@ -4,11 +4,11 @@ output:
     fig_caption: true
     fig_height: 10
     fig_width: 10
-    reference_docx: bootstrap/data/reportTemplate.docx
+    reference_docx: boot/data/reportTemplate.docx
     toc: true
     keep_md: false
   html_document: default
-bibliography: bootstrap/DATA.bib
+bibliography: boot/DATA.bib
 nocite: '@*'
 ---
 
