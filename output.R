@@ -47,3 +47,5 @@ write.taf(
 
 stock <- FLfse::SAM2FLStock(fit)
 save(stock, file = "output/FLStock.Rdata")
+
+# ADD catch options upload

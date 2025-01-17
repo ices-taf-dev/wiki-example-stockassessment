@@ -1,0 +1,131 @@
+---
+title: "Quality report for SAM assessment"
+format: html
+---
+
+
+```{r setup}
+### Global variable
+assessment_year <- 2024
+data_year <- assessment_year - 1
+
+### packages
+library("glue")
+library("tidyverse")
+library("stockassessment")
+library("icesTAF")
+```
+
+
+
+```{r load-SAM-data-conf-fit-diag}
+### load list of data, config and model results
+### saved in model.R script in TAF repo
+### load list of data, config and model results
+load("data/data.RData", verbose = TRUE)
+
+# extract sam data
+data_sam <- dat
+
+# extract sam configuration
+conf_sam <- loadConf(
+  dat,
+  taf.data.path("/sam_config/model.cfg"),
+  patch = TRUE
+)
+
+# extract sam fit
+load("model/fit.RData", verbose = TRUE)
+fit_sam <- fit
+
+### make residuals
+load("model/residuals.RData", verbose = TRUE)
+residuals_obs <- resids
+residuals_process <- resids_process
+
+### load retro analysis
+### saved in output.R script in TAF repo
+load("model/retro_fit.RData", verbose = TRUE)
+
+df_retro_analysis <- retro_fit
+
+```
+
+
+## Data input
+
+```{r fig-SAM-data-plot}
+#| label: fig-SAM-dataplot
+#| fig-cap: "SAM model input"
+dataplot(fit_sam)
+```
+
+## Model specifications
+
+```{r tbl-sam-conf-file}
+#| label: tbl-sam-conf-file
+#| tab-cap: "SAM model configuration of the assessment."
+print(conf_sam)
+```
+
+## Quality of model fit
+
+```{r  fig-SAM-resids-obs}
+#| label: fig-SAM-resids-obs
+#| fig-cap: "One step ahead residuals by data source."
+plot(residuals_obs)
+```
+
+```{r  fig-SAM-resids-obs-summary}
+#| label: fig-SAM-resids-obs-summary
+#| fig-cap: "Summary plots of observation residuals"
+plot(residuals_obs,
+     type = "summary")
+```
+
+```{r SAMresiduals}
+#| label: fig-SAM-resids-process
+#| fig-cap: "Process residuals of the N (upper panel) and F (lower panel) model. Blue circles indicate a positive residual, red circles a negative residual"
+plot(residuals_process)
+```
+
+```{r fig-SAM-resids-process-summary}
+#| label: fig-SAM-resids-process-summary
+#| fig-cap: "Summary plots of process residuals of the log(N) (upper row) and log(F) (lower row) model"
+plot(residuals_process,
+     type = "summary")
+```
+
+```{r SAMretro}
+#| label: fig-SAM-retro
+plot(df_retro_analysis)
+```
+
+## Comparison with last year assessment
+
+<!-- For now, the plots are made outside of TAF repo, but they could be inside the TAF repo by adding last year assessment STF parameter as data input. -->
+
+
+```{r fig-stf-assumption-comparison}
+#| label: fig-stf-assumption-comparison
+#| fig-cap: !expr glue("Comparison of short-term forecast assumption between assessment year ({assessment_year}) and previous assessment ({data_year})")
+#plot_stf_assumptions_comparison
+```
+
+```{r fig-plot-n-at-age-comparison}
+#| label: fig-plot-n-at-age-comparison
+#| fig-cap: !expr glue("Ratio of estimated number-at-age from {assessment_year} assessment to {data_year} assessment.")
+#list_plot_comparison_at_age$plot_n_at_age_comparison
+```
+
+```{r fig-plot-w-at-age-comparison}
+#| label: fig-plot-w-at-age-comparison
+#| fig-cap: !expr glue("Ratio of estimated weight-at-age from {assessment_year} assessment to {data_year} assessment.")
+#list_plot_comparison_at_age$plot_w_at_age_comparison
+```
+
+```{r fig-plot-B-at-age-comparison}
+#| label: fig-plot-B-at-age-comparison
+#| fig-cap: !expr glue("Ratio of estimated biomass-at-age from {assessment_year} assessment to {data_year} assessment.")
+#list_plot_comparison_at_age$plot_B_at_age_comparison
+```

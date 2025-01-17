@@ -1,4 +1,7 @@
+library(icesTAF)
 library(rmarkdown)
+library(quarto)
+
 
 source("utilities.R")
 
@@ -13,3 +16,7 @@ render("report.Rmd",
 # move to report folder
 cp("report.html", "report", move = TRUE)
 cp("report.docx", "report", move = TRUE)
+
+# build quality report
+
+quarto_render("report_quality_report.qmd")
